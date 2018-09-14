@@ -1,16 +1,16 @@
-var Koa = require('koa');
-var Router = require('koa-router');
-var bodyParser = require('koa-bodyparser');
+const Koa = require('koa');
+const Router = require('koa-router');
+const bodyParser = require('koa-bodyparser');
 
 
+const routesHandler = require('./services/routesHandler.js');
 
-const routesHandler = require('./services/routesHandler.js')
-var app = new Koa();
-var router = new Router();
+const app = new Koa();
+const router = new Router();
 app.use(bodyParser());
 
 
-router.post('/api/new', routesHandler.newLink)
+router.post('/api/new', routesHandler.newLink);
 
 router.get('/:id', routesHandler.getLink);
 

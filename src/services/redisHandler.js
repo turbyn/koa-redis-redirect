@@ -1,34 +1,34 @@
-var redis = require('redis');
-var client = redis.createClient();
+const redis = require('redis');
 
-client.on('connect', function() {
-    console.log('connected');
+const client = redis.createClient();
+
+const defaultTimeout = 60*10;
+
+client.on('connect', () => {
+  console.log('connected');
 });
 
-client.on("error", function (err) {
-    console.log("Error " + err);
-    console.log(err);
+client.on('error', (err) => {
+  console.log(`Error ${err}`);
+  console.log(err);
 });
 
-const asyncAdd = (key, value) => {
-  return new Promise((resolve, reject) => {
-    client.set(key, value, function(err, reply) {
-      if(err){return reject(err)}
-      resolve(reply)
-    });
-  })
-}
+const asyncAdd = (key, value, timeout) => new Promise((resolve, reject) => {
+  console.log('TIMEOUT - '+timeout);
+  client.set(key, value, 'EX', defaultTimeout, (err, reply) => {
+    if (err) { return reject(err); }
+    resolve(reply);
+  });
+});
 
-const asyncRead = (key) => {
-  return new Promise((resolve,reject) => {
-    client.get(key, function(err, reply) {
-      if(err){return reject(err)}
-      resolve(reply)
-    });
-  })
-}
+const asyncRead = key => new Promise((resolve, reject) => {
+  client.get(key, (err, reply) => {
+    if (err) { return reject(err); }
+    resolve(reply);
+  });
+});
 
 module.exports = {
   asyncAdd,
-  asyncRead
-}
+  asyncRead,
+};
