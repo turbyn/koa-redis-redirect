@@ -20,10 +20,11 @@ const newLink = async (ctx, next) => {
   const identifier = await generateStringAndTest();
 
   try {
-    await redisHandler.asyncAdd(identifier, ctx.request.body.url);
+    await redisHandler.asyncAdd(identifier, ctx.request.body.url, timeout);
     ctx.status = 200;
     return ctx.body = `localhost:3000/${identifier}`;
   } catch (e) {
+    console.log('ERR!' + e)
     return ctx.status = 500;
   }
 }
@@ -41,10 +42,7 @@ const getLink = async (ctx, next) => {
   // redirect here
   console.log(ctx.params.id);
   try {
-    console.log('STARTING! - async');
     const res = await redisHandler.asyncRead(ctx.params.id);
-    console.log('FINISHING! - async');
-    console.log(`Result - ${res}`);
     if (res) {
       ctx.redirect(res);
     } else {

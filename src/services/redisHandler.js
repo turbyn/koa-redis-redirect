@@ -1,8 +1,12 @@
 const redis = require('redis');
 
-const client = redis.createClient();
+const client = redis.createClient(process.env.REDIS_URL);
 
-const defaultTimeout = 60*10;
+let fs = require('fs')
+let nconf = require('nconf');
+nconf.use('file', {file: './config.json' } )
+
+
 
 client.on('connect', () => {
   console.log('connected');
@@ -14,7 +18,8 @@ client.on('error', (err) => {
 });
 
 const asyncAdd = (key, value, timeout) => new Promise((resolve, reject) => {
-  console.log('TIMEOUT - '+timeout);
+  let defaultTimeout = 60*10;
+  if(timeout){defaultTimeout=timeout}
   client.set(key, value, 'EX', defaultTimeout, (err, reply) => {
     if (err) { return reject(err); }
     resolve(reply);
