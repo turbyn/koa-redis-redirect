@@ -1,4 +1,4 @@
-# Project Title
+# Link shortener API
 
 Simple API for link shortening.
 
