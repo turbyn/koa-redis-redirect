@@ -13,11 +13,12 @@ POST /api/new,
 Example request:
 ```
 {
-  "url": "http://google.com", //necessary, has to be url-string
-  "timeout": 500 // unnecessary, number of seconds that link will be active (if not available in request, default value is taken)
-                 // has to be integer between 1 and 86400
+  "url": "http://google.com",
+  "timeout": 500
 }
 ```
+Url key is necessary, value has to be url string
+Timeout (seconds that link will be active) is unnecessary, if not available, server will use default value. If provided, it has to be integer between 1 and 86400.
 
 GET /:id
 
