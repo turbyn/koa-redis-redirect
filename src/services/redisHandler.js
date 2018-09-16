@@ -2,19 +2,12 @@ const redis = require('redis');
 
 const client = redis.createClient(process.env.REDIS_URL);
 
-let fs = require('fs')
-let nconf = require('nconf');
-nconf.use('file', {file: './config.json' } )
-
-
-
 client.on('connect', () => {
-  console.log('connected');
+  console.log('Connected');
 });
 
 client.on('error', (err) => {
-  console.log(`Error ${err}`);
-  console.log(err);
+  console.log('ERR! '+err)
 });
 
 const asyncAdd = (key, value, timeout) => new Promise((resolve, reject) => {

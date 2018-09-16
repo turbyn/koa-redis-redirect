@@ -3,6 +3,8 @@ const randomString = require('randomstring');
 
 const redisHandler = require('./redisHandler.js');
 
+const origin = "localhost:3000"
+
 const newLink = async (ctx, next) => {
   const url = ctx.request.body.url
 
@@ -13,7 +15,7 @@ const newLink = async (ctx, next) => {
 
   if(timeout || timeout === 0){
     if(!Number.isInteger(timeout) || (timeout < 1 || timeout > 86400)){
-      ctx.body = "timeout has to be integer, higher than 0 and less than 86400"
+      ctx.body = "timeout has to be integer, higher than 1 and less than 86400"
       return ctx.status = 400
     }
 
@@ -22,7 +24,7 @@ const newLink = async (ctx, next) => {
   try {
     await redisHandler.asyncAdd(identifier, ctx.request.body.url, timeout);
     ctx.status = 200;
-    return ctx.body = `localhost:3000/${identifier}`;
+    return ctx.body = `${origin}/${identifier}`;
   } catch (e) {
     console.log('ERR!' + e)
     return ctx.status = 500;
